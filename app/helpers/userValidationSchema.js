@@ -1,22 +1,45 @@
 // userSchema - username, email, password
-const userValidationSchema = {
-    username: {
-        isLength: {
-            options: { min: 3},
-            errorMessage: 'username should be minimum 3 characters'
-        }
+const emailSchema = {
+    notEmpty: {
+        errorMessage: 'email is required'
     },
-    email: {
-        isEmail: {
-            errorMessage: 'email format is invalid'
-        }
-    },
-    password: {
-        isLength: {
-            options: { min: 8, max: 128},
-            errorMessage: 'password should be between 8 - 128 characters long'
-        }
+    isEmail: {
+        errorMessage: 'email format is invalid'
     }
 }
 
-module.exports = userValidationSchema 
+const passwordSchema = {
+    notEmpty: {
+        errorMessage: 'password is required'
+    },
+    isLength: {
+        options: { min: 8, max: 128 },
+        errorMessage: 'password should be between 8 - 128 characters long'
+    }
+}
+
+const usernameSchema = {
+    notEmpty: {
+        errorMessage: 'username is required'
+    },
+    isLength: {
+        options: { min: 3 },
+        errorMessage: 'username should be minimum 3 characters'
+    }
+}
+
+const userRegistrationSchema = {
+    username: usernameSchema,
+    email: emailSchema,
+    password: passwordSchema 
+}
+
+const userLoginSchema = {
+    email: emailSchema,
+    password: passwordSchema 
+}
+
+module.exports = {
+    userRegistrationSchema,
+    userLoginSchema
+} 
