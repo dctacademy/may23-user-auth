@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator')
 const bcryptjs = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const _ = require('lodash')
 const User = require('../models/user-model')
 const usersCltr = {}
@@ -34,7 +35,12 @@ usersCltr.login = async (req, res) => {
             if(user) {
                 const result = await bcryptjs.compare(body.password, user.password)
                 if(result) {
-                    res.json(user) 
+                    // jwt token
+                    // res.json(user) 
+                    const token = jwt.sign({
+                        id: user._id
+                    }, process.env.JWT_SECRET, { expriesIn: '7d'})
+                    res.json({ token: token })
                 } else {
                     res.status(404).json({ error: 'invalid email / password'})
                 }
@@ -42,6 +48,16 @@ usersCltr.login = async (req, res) => {
                 res.status(404).json({ error: 'invalid email / password'})
             }
         }
+    } catch(e) {
+        res.json(e) 
+    }
+}
+
+usersCltr.account = async (req,res) => {
+    try {
+        const user = await User.findById(req.userId)
+        const resBody = _.pick(user, ['_id', 'username', 'email'])
+        res.json(resBody)
     } catch(e) {
         res.json(e) 
     }
