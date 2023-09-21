@@ -35,11 +35,10 @@ usersCltr.login = async (req, res) => {
             if(user) {
                 const result = await bcryptjs.compare(body.password, user.password)
                 if(result) {
-                    // jwt token
-                    // res.json(user) 
-                    const token = jwt.sign({
+                    const tokenData = {
                         id: user._id
-                    }, process.env.JWT_SECRET, { expriesIn: '7d'})
+                    }
+                    const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '7d'})
                     res.json({ token: token })
                 } else {
                     res.status(404).json({ error: 'invalid email / password'})
@@ -63,18 +62,6 @@ usersCltr.account = async (req,res) => {
     }
 }
 
-// usersCltr.register = function(req, res){
-//     const body = req.body 
-//     const user = new User(body)
-//     user.save()
-//         .then((user) => {
-//             res.json(user)
-//         })
-//         .catch((err) => {
-//             res.json(err)
-//         })
-// }
-
 module.exports = usersCltr 
 
 
@@ -90,16 +77,18 @@ module.exports = usersCltr
 */
 
 /*
-useEffect(() => {
-    axios.get()
-}, [])
 
+GET /api/users/account
 
-useEffect(() => {
+axios.get('lh:3050/api/users/acccount', {
+    headers: {
+        'Authorization': localStorage.getItem('token')
+    }
+})
 
-}, [state])
-
-
-axios.post(url, formData, optionsObj)
-
+axios.post('/api/tasks', formData, {
+    headers: {
+        'Authorization': localStorage.getItem('token')
+    }
+})
 */ 
