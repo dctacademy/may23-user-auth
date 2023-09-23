@@ -1,10 +1,31 @@
+const User = require('../models/user-model')
 // userSchema - username, email, password
-const emailSchema = {
+
+const loginEmailSchema = {
     notEmpty: {
         errorMessage: 'email is required'
     },
     isEmail: {
         errorMessage: 'email format is invalid'
+    }
+}
+
+const registerEmailSchema = {
+    notEmpty: {
+        errorMessage: 'email is required'
+    },
+    isEmail: {
+        errorMessage: 'email format is invalid'
+    },
+    custom: {
+        options: async (value) => {
+            const user = await User.findOne({ email: value })
+            if(!user) {
+                return true 
+            } else {
+                throw new Error('user record exists')
+            }
+        }
     }
 }
 
@@ -30,12 +51,12 @@ const usernameSchema = {
 
 const userRegistrationSchema = {
     username: usernameSchema,
-    email: emailSchema,
+    email: registerEmailSchema,
     password: passwordSchema 
 }
 
 const userLoginSchema = {
-    email: emailSchema,
+    email: loginEmailSchema,
     password: passwordSchema 
 }
 

@@ -29,6 +29,9 @@ app.get('/api/users/account', authenticateUser, usersCltr.account)
 
 app.get('/api/notes', authenticateUser, notesCltr.list)
 app.post('/api/notes', authenticateUser, checkSchema(noteValidationSchema), notesCltr.create)
+app.get('/api/notes/:id', authenticateUser, notesCltr.show )
+app.put('/api/notes/:id', authenticateUser, checkSchema(noteValidationSchema), notesCltr.show)
+app.delete('/api/notes/:id', authenticateUser, notesCltr.destroy )
 
 app.get('/api/greet/welcome', greetCltr.welcome)
 app.get('/api/greet/goodbye', greetCltr.goodbye)

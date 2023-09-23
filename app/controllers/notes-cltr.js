@@ -29,4 +29,51 @@ notesCltr.create = async (req, res) => {
     }
 }
 
+// find single record
+notesCltr.show = async (req, res) => {
+    const id = req.params.id 
+    try {
+        const note = await Note.findOne({ _id: id, userId: req.userId })
+        if(!note) {
+            res.status(404).json({})
+        } else {
+            res.json(note)
+        }
+    } catch(e) {
+        res.json(e) 
+    }
+}
+
+// update record
+notesCltr.update = async (req, res) => {
+    const id = req.params.id 
+    const body = req.body 
+    try {
+        const note = await Note.findOneAndUpdate({_id: id, userId: req.userId }, body, { new: true }) 
+        if(!note) {
+            res.status(404).json({})
+        } else {
+            res.json(note) 
+        }
+    } catch(e) {
+        res.json(e) 
+    }
+}
+
+// delete record 
+notesCltr.destroy  = async (req,res) => {
+    const id = req.params.id 
+    try {
+        const note = await Note.findOneAndDelete({ _id: id, userId: req.userId}) 
+        if(!note) {
+            res.status(404).json({})
+        } else {
+            res.json(note)
+        }
+    } catch(e) {
+        res.json(e) 
+    }
+}
+
+
 module.exports = notesCltr 
